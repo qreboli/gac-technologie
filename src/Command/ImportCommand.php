@@ -48,47 +48,54 @@ class ImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (($handle = fopen(__DIR__ . "/files/tickets_appels_201202.csv", "r")) !== FALSE) {
+        //dd(filesize(__DIR__ . "/files/tickets_appels_201202.csv"));die;
 
-            $i = 0;
-            ini_set('auto_detect_line_endings',TRUE);
+        if(filesize(__DIR__ . "/files/tickets_appels_201202.csv") > "1000000"){
 
-            while (($data = fgetcsv($handle, 200, ";")) !== FALSE) {
-                if (preg_match('/^[0-9]{8}$/', $data[self::BILLED_ACCOUNT])) {
-                    $subscriber = $this->handleSubscriber(trim($data[self::SUBSCRIBER_NUMBER]));
-                    $account = $this->handleAccount(trim($data[self::BILLED_ACCOUNT]));
-                    $subscriber->addAccount($account);
+            // appel cuttingCsv();
+        } else {
+            if (($handle = fopen(__DIR__ . "/files/tickets_appels_201202.csv", "r")) !== FALSE) {
 
-                    $bill = $this->handleBill(trim($data[self::BILL_NUMBER]));
-                    $account->addBill($bill);
+                $i = 0;
+                ini_set('auto_detect_line_endings',TRUE);
 
-                    $type = $this->handleType(trim($data[self::TYPE]));
+                while (($data = fgetcsv($handle, 200, ";")) !== FALSE) {
+                    if (preg_match('/^[0-9]{8}$/', $data[self::BILLED_ACCOUNT])) {
+                        $subscriber = $this->handleSubscriber(trim($data[self::SUBSCRIBER_NUMBER]));
+                        $account = $this->handleAccount(trim($data[self::BILLED_ACCOUNT]));
+                        $subscriber->addAccount($account);
 
-                    echo $data[self::TYPE].PHP_EOL;
+                        $bill = $this->handleBill(trim($data[self::BILL_NUMBER]));
+                        $account->addBill($bill);
 
-                    $this->handleCommunication(
-                        $type,
-                        $bill,
-                        trim($data[self::DATE]),
-                        trim($data[self::TIME]),
-                        trim($data[self::REAL_DURATION]),
-                        trim($data[self::BILLED_DURATION])
-                    );
-                    $this->em->flush();
-                    unset($data);
-                    ++$i;
-                    if($i>=100)
-                    {
-                        $i = 0;
-                        $this->em->clear();
+                        $type = $this->handleType(trim($data[self::TYPE]));
+
+                        echo $data[self::TYPE].PHP_EOL;
+
+                        $this->handleCommunication(
+                            $type,
+                            $bill,
+                            trim($data[self::DATE]),
+                            trim($data[self::TIME]),
+                            trim($data[self::REAL_DURATION]),
+                            trim($data[self::BILLED_DURATION])
+                        );
+                        $this->em->flush();
+                        unset($data);
+                        ++$i;
+                        if($i>=100)
+                        {
+                            $i = 0;
+                            $this->em->clear();
+                        }
                     }
                 }
-            }
-            fclose($handle);
-            ini_set('auto_detect_line_endings',FALSE);
-            $this->em->flush();
+                fclose($handle);
+                ini_set('auto_detect_line_endings',FALSE);
+                $this->em->flush();
 
-            return Command::SUCCESS;
+                return Command::SUCCESS;
+            }
         }
         return Command::FAILURE;
 

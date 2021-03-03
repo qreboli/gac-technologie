@@ -19,6 +19,31 @@ class CommunicationRepository extends ServiceEntityRepository
         parent::__construct($registry, Communication::class);
     }
 
+    public function findRealDurationCallsAfterDate(): string
+    {
+        return $this->createQueryBuilder('d')
+            ->select('SEC_TO_TIME(SUM(TIME_TO_SEC(d.real_duration)))')
+            ->where("d.date >= :date")
+            ->andWhere('d.real_duration IS NOT NULL')
+            ->setParameter('date', '2012-02-15')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findBilledDuration()
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d.billed_duration')
+            ->where("d.time < :time1 OR d.time > :time2 ")
+            ->andWhere('d.billed_duration IS NOT NULL')
+            ->orderBy('d.billed_duration', 'DESC')
+            ->setMaxResults(10)
+            ->setParameter('time1', '08:00:00')
+            ->setParameter('time2', '18:00:00')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Communication[] Returns an array of Communication objects
     //  */
