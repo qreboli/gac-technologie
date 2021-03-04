@@ -49,9 +49,6 @@ class ImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if(filesize(__DIR__ . "/files/tickets_appels_201202.csv") > "1000000"){
-            // appel cuttingCsv()
-        } else {
             if (($handle = fopen(__DIR__ . "/files/tickets_appels_201202.csv", "r")) !== FALSE) {
 
                 $i = 0;
@@ -94,7 +91,6 @@ class ImportCommand extends Command
 
                 return Command::SUCCESS;
             }
-        }
         return Command::FAILURE;
 
     }
