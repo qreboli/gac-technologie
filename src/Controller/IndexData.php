@@ -25,9 +25,11 @@ class IndexData extends AbstractController
      */
     public function index(CommunicationRepository $communicationRepository)
     {
+        //dd($communicationRepository->findAllSms());
         return new Response($this->twig->render("home/index.html.twig", [
         'real_duration' => $communicationRepository->findRealDurationCallsAfterDate(),
-            'billed_duration' => $communicationRepository->findBilledDuration()
+            'billed_duration' => $communicationRepository->findBilledDuration(),
+            'smsCount' => $communicationRepository->findAllSms()
         ]));
     }
 

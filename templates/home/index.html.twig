@@ -1,16 +1,20 @@
 <h1>GAC Technologie</h1>
 <div class="">
     <div class="">
-        Durée totale réelle des appels :
-        {{ real_duration }}
+        <h3>Durée totale réelle des appels :</h3>
+        {{ real_duration }} (h:m:s)
     </div>
     <div class="">
-        Top 10 volume data facturé :
+        <h3>Top 10 volume data facturé :</h3>
         <ul>
-            {% for test in billed_duration %}
-                <li>{{ test.billed_duration|date('H-i-s') }}</li>
+            {% for billed_data in billed_duration %}
+                <li>{{ billed_data.billed_duration|date('H-i-s') }} (h:m:s)</li>
             {% endfor %}
         </ul>
+    </div>
+    <div class="">
+        <h3>Quantité totale de SMS :</h3>
+        {{ smsCount }}
     </div>
 </div>
 

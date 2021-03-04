@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-ini_set('memory_limit', '-1');
+// la command a été éxécuté avec le memory_limit
+//ini_set('memory_limit', '-1');
 
 use App\Entity\Account;
 use App\Entity\Bill;
@@ -48,11 +49,8 @@ class ImportCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        //dd(filesize(__DIR__ . "/files/tickets_appels_201202.csv"));die;
-
         if(filesize(__DIR__ . "/files/tickets_appels_201202.csv") > "1000000"){
-
-            // appel cuttingCsv();
+            // appel cuttingCsv()
         } else {
             if (($handle = fopen(__DIR__ . "/files/tickets_appels_201202.csv", "r")) !== FALSE) {
 

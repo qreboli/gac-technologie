@@ -44,6 +44,15 @@ class CommunicationRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllSms()
+    {
+        return $this->createQueryBuilder('d')
+            ->select('count(d)')
+            ->where('d.real_duration IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Communication[] Returns an array of Communication objects
     //  */

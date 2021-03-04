@@ -3,9 +3,10 @@
 
 namespace App\Service;
 
-class chunckCsv
+class ChunckCsv
 {
-    private function cuttingCsv()
+    // Découpage du CSV en plusieurs fichiers pour éviter l'erreur du memory_limit.
+    private function cuttingCsv($csvFile)
     {
         $row_count_limit = 1000;
         $file_counter = 1;
