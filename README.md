@@ -32,3 +32,7 @@ symfony server:start
 ```
 php bin/console app:import-data
 ```
+### Open web browser and go to 
+```
+https://127.0.0.1:8000/data
+```
